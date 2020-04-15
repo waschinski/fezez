@@ -1,0 +1,45 @@
+version: "2"
+services:
+  php:
+    image: yiisoftware/yii2-php:7.3-apache
+    environment:
+      - DB_DSN=mysql:host=YOUR_DB_SERVER;port=3306;dbname=yii_db
+      - DB_USERNAME=YOUR_DB_USERNAME
+      - DB_PASSWORD=YOUR_DB_PASSWORD
+      - MAIL_ADMIN=YOUR_ADMIN_EMAIL
+      - MAIL_SENDER=YOUR_SENDER_EMAIL
+      - MAIL_SENDERNAME=A letter from Fezez the Merchant
+      - SECRETKEY=YOUR_SECRET_KEY
+      - COOKIEVALIDATIONKEY=YOUR_COOKIE_VALIDATION_KEY
+      - SMTP_SERVER=YOUR_MAIL_SERVER
+      - SMTP_PORT=
+      - SMTP_USERNAME=
+      - SMTP_PASSWORD=
+      - SMTP_ENCRYPTION=
+    volumes:
+      - ~/.composer-docker/cache:/root/.composer/cache:delegated
+      - ./:/app:delegated
+    ports:
+      - "80:80"
+    networks:
+      - my-network
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=YOUR_MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE=yii_db
+      - MYSQL_USER=YOUR_MYSQL_USERNAME
+      - MYSQL_PASSWORD=YOUR_MYSQL_PASSWORD
+      - "3306:3306"
+    expose:
+      - "3306"
+    volumes:
+      - my-db:/var/lib/mysql
+    networks:
+      - my-network
+volumes:
+  my-db:
+networks:
+  my-network:
+    driver: bridge

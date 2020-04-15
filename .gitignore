@@ -4,3 +4,6 @@ protected/runtime/*
 !protected/runtime/.gitignore
 protected/data/*.db
 themes/classic/views/
+docker-compose-dev.yml
+composer.phar
+/vendor/
