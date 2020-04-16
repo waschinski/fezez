@@ -37,6 +37,17 @@ class Offer extends ActiveRecord
     }
 
     /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'description' => 'Description',
+            'key' => 'Key',
+        ];
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function behaviors()
@@ -52,6 +63,14 @@ class Offer extends ActiveRecord
     public function rules()
     {
         return [
+            ['description', 'trim'],
+            ['description', 'required'],
+            ['description', 'string', 'max' => 255],
+
+            ['key', 'trim'],
+            ['key', 'required'],
+            ['key', 'string', 'min' => 4, 'max' => 64],
+
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [
                     self::STATUS_RECEIVED,
@@ -67,9 +86,19 @@ class Offer extends ActiveRecord
     /**
      * Decrypts and returns key hash
      */
-    public function getkey()
+    public function getKey()
     {
         return Yii::$app->getSecurity()->decryptByKey(utf8_decode($this->key_hash), Yii::$app->params['secretKey']);
+    }
+
+    /**
+     * Generates key hash from key and sets it to the model
+     *
+     * @param string $key
+     */
+    public function setKey($key)
+    {
+        $this->key_hash = utf8_encode(Yii::$app->getSecurity()->encryptByKey($key, Yii::$app->params['secretKey']));
     }
 
     /**
@@ -98,21 +127,169 @@ class Offer extends ActiveRecord
     }
 
     /**
-     * Generates key hash from key and sets it to the model
-     *
-     * @param string $key
-     */
-    public function setKeyHash($key)
-    {
-        $this->key_hash = utf8_encode(Yii::$app->getSecurity()->encryptByKey($key, Yii::$app->params['secretKey']));
-    }
-
-    /**
      * Requests related to the offer
      */
     public function getRequests()
     {
         return $this->hasMany(Request::className(), ['offer_id' => 'id']);
+    }
+
+    /** Cancel a request.
+     *
+     * @return bool whether canceling a request was successful
+     */
+    public function cancelrequest($id)
+    {
+        $transaction = Request::getDb()->beginTransaction();
+        $request = Request::findOne($id);
+        try {
+            if ($request->status != Request::STATUS_WAITING) {
+                throw new \yii\base\Exception('Error while canceling Request: Request not waiting!');
+            }
+            $request->status = Request::STATUS_DELETED;
+            $offer_id = $request->offer_id;
+            if (!$request->save()) {
+                throw new \yii\db\Exception('Error while saving Request model!');
+            }
+            // Offer the request has been for
+            $offer = Offer::findOne([
+                'id' => $offer_id
+            ]);
+            $offer->status = Offer::STATUS_ACTIVE;
+            if (!$offer->save()) {
+                throw new \yii\db\Exception('Error while saving Offer model!');
+            }
+            if (!$this->sendRequestCanceledEmail($offer)) {
+                throw new \yii\db\Exception('Error while sending Request Canceled email!');
+            }
+            $transaction->commit();
+        } catch(\Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+        return true;
+    }
+
+    /** Accept a request.
+     *
+     * @return bool whether accepting a request was successful
+     */
+    public function acceptrequest($id)
+    {
+
+        return true;
+    }
+
+    /**
+     * Sends an email informing the trader about the request.
+     *
+     * @return bool whether the email was send
+     */
+    public function sendRequestReceivedEmail()
+    {
+        // User who offers
+        $user = User::findOne($this->user_id);
+        // Request for the offer
+        $request = Request::findOne([
+            'offer_id' => $this->id
+        ]);
+        // User of that request
+        $requestuser = User::findOne([
+            'id' => $request->user_id
+        ]);
+
+        return Yii::$app
+            ->mailer
+            ->compose(
+                ['html' => 'requestReceived-html', 'text' => 'requestReceived-text'],
+                ['user' => $user, 'requestuser' => $requestuser]
+            )
+            ->setFrom([Yii::$app->params['senderEmail'] => Yii::$app->params['senderName']])
+            ->setTo($user->email)
+            ->setSubject('Request received at ' . Yii::$app->name)
+            ->send();
+    }
+
+    /**
+     * Sends an email informing the user about the request being rejected.
+     *
+     * @return bool whether the email was send
+     */
+    public function sendRequestRejectedEmail()
+    {
+        // User who offers
+        $user = User::findOne($this->user_id);
+        // Request for the offer
+        $request = Request::findOne([
+            'offer_id' => $this->id
+        ]);
+        // User of that request
+        $requestuser = User::findOne([
+            'id' => $request->user_id
+        ]);
+
+        return Yii::$app
+            ->mailer
+            ->compose(
+                ['html' => 'requestRejected-html', 'text' => 'requestRejected-text'],
+                ['offer' => $this, 'requestuser' => $requestuser]
+            )
+            ->setFrom([Yii::$app->params['senderEmail'] => Yii::$app->params['senderName']])
+            ->setTo($requestuser->email)
+            ->setSubject('Request rejected at ' . Yii::$app->name)
+            ->send();
+    }
+
+    /**
+     * Sends an email informing the user about the request being accepted.
+     *
+     * @return bool whether the email was send
+     */
+    public function sendRequestAcceptedEmail()
+    {
+        // User who offers
+        $user = User::findOne($this->user_id);
+        // Request for the offer
+        $request = Request::findOne([
+            'offer_id' => $this->id
+        ]);
+        // User of that request
+        $requestuser = User::findOne([
+            'id' => $request->user_id
+        ]);
+
+        return Yii::$app
+            ->mailer
+            ->compose(
+                ['html' => 'requestAccepted-html', 'text' => 'requestAccepted-text'],
+                ['offer' => $this, 'requestuser' => $requestuser]
+            )
+            ->setFrom([Yii::$app->params['senderEmail'] => Yii::$app->params['senderName']])
+            ->setTo($requestuser->email)
+            ->setSubject('Request accepted at ' . Yii::$app->name)
+            ->send();
+    }
+
+    /**
+     * Sends an email informing the user about the request being accepted.
+     *
+     * @return bool whether the email was send
+     */
+    public function sendRequestCanceledEmail()
+    {
+        // User who offers
+        $user = User::findOne($this->user_id);
+
+        return Yii::$app
+            ->mailer
+            ->compose(
+                ['html' => 'requestCanceled-html', 'text' => 'requestCanceled-text'],
+                ['offer' => $this, 'user' => $user]
+            )
+            ->setFrom([Yii::$app->params['senderEmail'] => Yii::$app->params['senderName']])
+            ->setTo($user->email)
+            ->setSubject('Request canceled at ' . Yii::$app->name)
+            ->send();
     }
 
 }

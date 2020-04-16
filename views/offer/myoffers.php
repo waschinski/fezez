@@ -11,7 +11,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="offer-myoffers">
     <h1><?= Html::encode($this->title) ?></h1>
-    <p>Below you will find all keys you are currently offering. <span style="font-style:italic"><?= Html::a('Got a new spare key?', ['offer/newoffer']) ?></span></p>
+    <p>Below you will find all keys you are currently offering. <span style="font-style:italic"><?= Html::a('Got a new spare key?', ['offer/new']) ?></span></p>
 <?php
 $dataProvider = new ActiveDataProvider([
     'query' => Offer::find()
@@ -50,10 +50,10 @@ echo GridView::widget([
         [  
             'class' => 'yii\grid\ActionColumn',
             'header'=> 'Actions',
-            'template' => '{activate} {deactivate} {reject} {accept}',
+            'template' => '{activate} {deactivate} {reject} {accept} {edit}',
             'buttons' => [
                 'activate' => function ($url, $model) {
-                    return $model->status == Offer::STATUS_INACTIVE ? Html::a('Activate', ['offer/setofferstatus'], [
+                    return $model->status == Offer::STATUS_INACTIVE ? Html::a('Activate', ['offer/setstatus'], [
                                 'title' => 'Activate',
                                 'class' => 'btn btn-primary btn-xs',
                                 'data' =>[
@@ -66,7 +66,7 @@ echo GridView::widget([
                     ]) : '';
                 },
                 'deactivate' => function ($url, $model) {
-                    return $model->status == Offer::STATUS_ACTIVE ? Html::a('Deactivate', ['offer/setofferstatus'], [
+                    return $model->status == Offer::STATUS_ACTIVE ? Html::a('Deactivate', ['offer/setstatus'], [
                                 'title' => 'Deactivate',
                                 'class' => 'btn btn-primary btn-xs',
                                 'data' =>[
@@ -79,7 +79,7 @@ echo GridView::widget([
                     ]) : '';
                 },
                 'reject' => function ($url, $model) {
-                    return $model->status == Offer::STATUS_REQUESTED ? Html::a('Reject', ['offer/rejectrequest'], [
+                    return $model->status == Offer::STATUS_REQUESTED ? Html::a('Reject', ['request/reject'], [
                                 'title' => 'Reject',
                                 'class' => 'btn btn-primary btn-xs',
                                 'data' =>[
@@ -91,7 +91,7 @@ echo GridView::widget([
                     ]) : '';
                 },
                 'accept' => function ($url, $model) {
-                    return $model->status == Offer::STATUS_REQUESTED ? Html::a('Accept', ['offer/acceptrequest'], [
+                    return $model->status == Offer::STATUS_REQUESTED ? Html::a('Accept', ['request/accept'], [
                                 'title' => 'Accept',
                                 'class' => 'btn btn-primary btn-xs',
                                 'data' =>[
@@ -100,6 +100,12 @@ echo GridView::widget([
                                         'id' => $model->id
                                     ],
                                 ]
+                    ]) : '';
+                },
+                'edit' => function ($url, $model) {
+                    return $model->status == Offer::STATUS_ACTIVE || $model->status == Offer::STATUS_INACTIVE ? Html::a('Edit', ['offer/edit/' . $model->id], [
+                                'title' => 'Edit',
+                                'class' => 'btn btn-primary btn-xs',
                     ]) : '';
                 },
             ],

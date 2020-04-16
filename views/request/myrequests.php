@@ -55,7 +55,7 @@ echo GridView::widget([
             'template' => '{cancel}',
             'buttons' => [
                 'cancel' => function ($url, $model) {
-                    return $model->status == Request::STATUS_WAITING ? Html::a('Cancel', ['offer/cancelrequest'], [
+                    return $model->status == Request::STATUS_WAITING ? Html::a('Cancel', ['request/cancel'], [
                                 'title' => 'Cancel',
                                 'class'=> 'btn btn-primary btn-xs',
                                 'data'=>[

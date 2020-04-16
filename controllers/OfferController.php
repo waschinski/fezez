@@ -7,21 +7,11 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
-use app\models\OfferForm;
 use app\models\Offer;
+use app\models\Request;
 
 class OfferController extends Controller
 {
-    /**
-     * Displays marketplace.
-     *
-     * @return string
-     */
-    public function actionMyrequests()
-    {
-        return $this->render('myrequests');
-    }
-
     /**
      * Displays my offers.
      *
@@ -37,16 +27,35 @@ class OfferController extends Controller
      *
      * @return string
      */
-    public function actionNewoffer()
+    public function actionNew()
     {
-        $model = new OfferForm();
-        if ($model->load(Yii::$app->request->post()) && $model->createoffer()) {
+        $offer = new Offer();
+        $offer->user_id = \Yii::$app->user->identity->ID;
+        if ($offer->load(\Yii::$app->request->post()) && $offer->validate() && $offer->save()) {
             Yii::$app->session->setFlash('success', 'Fezez confirms your offer.');
             return $this->redirect(['offer/myoffers']);
         }
 
         return $this->render('newoffer', [
-            'model' => $model,
+            'model' => $offer,
+        ]);
+    }
+
+    /**
+     * Displays edit offer form.
+     *
+     * @return string
+     */
+    public function actionEdit()
+    {
+        $id = Yii::$app->request->get('id');
+        $offer = Offer::findOne(['id' => $id, 'user_id' => \Yii::$app->user->identity->ID]);
+        if ($offer->load(\Yii::$app->request->post()) && $offer->validate() && $offer->save()) {
+            Yii::$app->session->setFlash('success', 'Fezez updated your offer.');
+            return $this->redirect(['offer/myoffers']);
+        }
+        return $this->render('editoffer', [
+            'model' => $offer
         ]);
     }
 
@@ -55,91 +64,28 @@ class OfferController extends Controller
      *
      * @return string
      */
-    public function actionSetofferstatus()
+    public function actionSetstatus()
     {
-        $model = new OfferForm();
+        $model = new Offer();
         $id = Yii::$app->request->post('id');
         $status = Yii::$app->request->post('status');
-        if ($model->setofferstatus($id, $status)) {
-            if ($status == Offer::STATUS_ACTIVE) {
-                $statustext = 'activated';
-            } else {
-                $statustext = 'deactivated';
-            }
-            Yii::$app->session->setFlash('success', 'Fezez '.$statustext.' your offer.');
-            return $this->redirect(['offer/myoffers']);
-        }
-
-        return $this->render('myoffers');
-    }
-
-    /**
-     * Request an offer.
-     *
-     * @return string
-     */
-    public function actionRequestoffer()
-    {
-        $id = Yii::$app->request->post('id');
-        $model = new OfferForm();
-        if ($model->requestoffer($id)) {
-            Yii::$app->session->setFlash('success', 'Fezez sent your request to the trader.');
-            return $this->redirect(['site/index']);
+        if ($status == Offer::STATUS_ACTIVE) {
+            $statustext = 'activate';
         } else {
-            Yii::$app->session->setFlash('error', 'Sorry, Fezez was unable to send your request to the trader.');
+            $statustext = 'deactivate';
         }
+        try {
+            $offer = Offer::findOne(['id' => $id, 'user_id' => \Yii::$app->user->identity->id]);
+            $offer->status = $status;
+            if (!$offer->save()) {
+                throw new \yii\db\Exception('Error while saving Offer model!');
+            }
 
-        return $this->render('@app/views/site/marketplace');
-    }
-    
-    /**
-     * Cancel a request.
-     *
-     * @return string
-     */
-    public function actionCancelrequest()
-    {
-        $id = Yii::$app->request->post('id');
-        $model = new OfferForm();
-        if ($model->cancelrequest($id)) {
-            Yii::$app->session->setFlash('success', 'Fezez confirms canceling the request.');
-            return $this->redirect(['offer/myrequests']);
-        }
-
-        return $this->render('myrequests');
-    }
-
-    /**
-     * Reject a request.
-     *
-     * @return string
-     */
-    public function actionRejectrequest()
-    {
-        $id = Yii::$app->request->post('id');
-        $model = new OfferForm();
-        if ($model->rejectrequest($id)) {
-            Yii::$app->session->setFlash('success', 'Fezez confirms rejecting the request.');
+            Yii::$app->session->setFlash('success', 'Fezez '.$statustext.'d your offer.');
             return $this->redirect(['offer/myoffers']);
+        } catch(\Throwable $e) {
+            Yii::$app->session->setFlash('error', 'Sorry, Fezez was unable to '.$statustext.' your offer status.');
+            return $this->render('myoffers');
         }
-
-        return $this->render('myoffers');
-    }
-
-    /**
-     * Reject a request.
-     *
-     * @return string
-     */
-    public function actionAcceptrequest()
-    {
-        $id = Yii::$app->request->post('id');
-        $model = new OfferForm();
-        if ($model->acceptrequest($id)) {
-            Yii::$app->session->setFlash('success', 'Fezez confirms accepting the request.');
-            return $this->redirect(['offer/myoffers']);
-        }
-
-        return $this->render('myoffers');
     }
 }

@@ -59,8 +59,7 @@ class Request extends ActiveRecord
     public function getkey()
     {
         if ($this->status == self::STATUS_ACCEPTED) {
-            $offer = Offer::findOne(['id' => $this->offer_id]);
-            return Yii::$app->getSecurity()->decryptByKey(utf8_decode($offer->key_hash), Yii::$app->params['secretKey']);
+            return Offer::findOne(['id' => $this->offer_id])->getKey();
         }
         return '';
     }
