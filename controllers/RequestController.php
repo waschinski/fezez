@@ -13,6 +13,32 @@ use app\models\Offer;
 class RequestController extends Controller
 {
     /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['myrequests', 'request', 'cancel', 'accept', 'reject'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['myrequests', 'request', 'cancel', 'accept', 'reject'],
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'logout' => ['post'],
+                ],
+            ],
+        ];
+    }
+
+    /**
      * Displays my requests.
      *
      * @return string
