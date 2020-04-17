@@ -25,18 +25,9 @@ class m200407_122035_init extends Migration
 			'verification_token' => $this->string()->defaultValue(null),
             'status' => $this->smallInteger()->notNull()->defaultValue(10),
             'karma' => $this->integer()->notNull()->defaultValue(0),
-            // 'invited_by' => $this->integer()->defaultValue(null),
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),
         ], $tableOptions);
-        /* $this->addForeignKey(
-          'fk_invited_by_user_id',
-            'user',
-            'invited_by',
-            'user',
-            'id',
-            'NO ACTION',
-        ); */
 
         $this->createTable('offer', [
             'id' => $this->primaryKey(),

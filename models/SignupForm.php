@@ -16,6 +16,7 @@ class SignupForm extends Model
     public $username;
     public $email;
     public $password;
+    public $code;
 
 
     /**
@@ -37,7 +38,24 @@ class SignupForm extends Model
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
+
+            [['code'], 'validateCode', 'skipOnEmpty' => false, 'skipOnError' => false]
         ];
+    }
+
+    public function validateCode($attribute, $params)
+    {
+        if (Yii::$app->params['InvitationMandatory'] == '1' &&
+                Invitation::find()
+                    ->where([
+                            'email' => $this->email,
+                            'code' => $this->code,
+                            'new_user_id' => null
+                    ])
+                    ->andWhere('valid_until >= UNIX_TIMESTAMP()')
+                    ->count() == 0) {
+            $this->addError('code', 'Code is invalid or not matching email.');
+        }
     }
 
     /**
@@ -51,13 +69,38 @@ class SignupForm extends Model
             return null;
         }
         
-        $user = new User();
-        $user->username = $this->username;
-        $user->email = $this->email;
-        $user->setPassword($this->password);
-        $user->generateAuthKey();
-        $user->generateEmailVerificationToken();
-        return $user->save() && $this->sendEmail($user);
+        $transaction = User::getDb()->beginTransaction();
+        try {
+            $user = new User();
+            $user->username = $this->username;
+            $user->email = $this->email;
+            $user->setPassword($this->password);
+            $user->generateAuthKey();
+            $user->generateEmailVerificationToken();
+            if (Yii::$app->params['InvitationMandatory'] == '1') {
+                $invitation = Invitation::findOne(['email' => $this->email, 'code' => $this->code]);
+                $user->invited_by = $invitation->user_id;
+            }
+            if (!$user->save()) {
+                throw new \yii\db\Exception('Error while saving User model!');
+            }
+            if (Yii::$app->params['InvitationMandatory'] == '1') {
+                $invitation->new_user_id = $user->getId();
+                if (!$invitation->save()) {
+                    throw new \yii\db\Exception('Error while saving Invitation model!');
+                }
+            }
+            if (!$this->sendEmail($user)) {
+                throw new \yii\base\Exception('Error while sending Verify email!');
+            }
+            $transaction->commit();
+            Yii::$app->session->setFlash('success', 'Fezez confirms accepting the request.');
+            return true;
+        } catch(\Throwable $e) {
+            $transaction->rollBack();
+            Yii::$app->session->setFlash('error', 'Sorry, an error occured while signing up.');
+            return false;
+        }
 
     }
 

@@ -7,4 +7,5 @@ return [
     'user.passwordResetTokenExpire' => 3600,
     // !!! insert a secret key in the following (if it is empty) - this is required for key encryption
     'secretKey' => getenv('SECRETKEY'),
+    'InvitationMandatory' => getenv('INVITATION_MANDATORY'),
 ];

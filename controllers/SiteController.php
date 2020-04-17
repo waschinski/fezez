@@ -14,8 +14,7 @@ use app\models\ContactForm;
 use app\models\ResetPasswordForm;
 use app\models\PasswordResetRequestForm;
 use app\models\ResendVerificationEmailForm;
-use app\models\OfferForm;
-use app\models\Offer;
+use app\models\InviteForm;
 
 
 class SiteController extends Controller
@@ -28,7 +27,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'index', 'login', 'signup'],
+                'only' => ['logout', 'index', 'login', 'signup', 'invite'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -36,7 +35,7 @@ class SiteController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index', 'invite'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -78,6 +77,24 @@ class SiteController extends Controller
     }
 
     /**
+     * Invite an user.
+     *
+     * @return mixed
+     */
+    public function actionInvite()
+    {
+        $model = new InviteForm();
+        if ($model->load(Yii::$app->request->post()) && $model->invite()) {
+            Yii::$app->session->setFlash('success', 'Your friend has been invited. Please tell your friend to check for the invitation email.');
+            return $this->redirect(['site/invite']);
+        }
+
+        return $this->render('invite', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
      * Signs user up.
      *
      * @return mixed
@@ -85,6 +102,10 @@ class SiteController extends Controller
     public function actionSignup()
     {
         $model = new SignupForm();
+        if (Yii::$app->params['InvitationMandatory'] == '1') {
+            $model->code = Yii::$app->request->get('code');
+            $model->email = Yii::$app->request->get('email');
+        }
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
             Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
             return $this->goHome();

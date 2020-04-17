@@ -44,6 +44,9 @@ AppAsset::register($this);
     } else {
         $menuItems[] = ['label' => 'My Offers', 'url' => ['/offer/myoffers']];
         $menuItems[] = ['label' => 'My Requests', 'url' => ['/request/myrequests']];
+        if (Yii::$app->params['InvitationMandatory'] == '1') {
+            $menuItems[] = ['label' => 'Invite a friend', 'url' => ['/invite']];
+        }
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton(

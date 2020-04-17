@@ -57,6 +57,7 @@ $config = [
 			'enablePrettyUrl' => true,
 			'rules' => array(
                     'home' => 'site/home',
+                    'invite' => 'site/invite',
                     'signup' => 'site/signup',
                     'login' => 'site/login',
                     'requestpasswordreset' => 'site/request-password-reset',
