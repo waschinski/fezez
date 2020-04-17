@@ -134,52 +134,6 @@ class Offer extends ActiveRecord
         return $this->hasMany(Request::className(), ['offer_id' => 'id']);
     }
 
-    /** Cancel a request.
-     *
-     * @return bool whether canceling a request was successful
-     */
-    public function cancelrequest($id)
-    {
-        $transaction = Request::getDb()->beginTransaction();
-        $request = Request::findOne($id);
-        try {
-            if ($request->status != Request::STATUS_WAITING) {
-                throw new \yii\base\Exception('Error while canceling Request: Request not waiting!');
-            }
-            $request->status = Request::STATUS_DELETED;
-            $offer_id = $request->offer_id;
-            if (!$request->save()) {
-                throw new \yii\db\Exception('Error while saving Request model!');
-            }
-            // Offer the request has been for
-            $offer = Offer::findOne([
-                'id' => $offer_id
-            ]);
-            $offer->status = Offer::STATUS_ACTIVE;
-            if (!$offer->save()) {
-                throw new \yii\db\Exception('Error while saving Offer model!');
-            }
-            if (!$this->sendRequestCanceledEmail($offer)) {
-                throw new \yii\db\Exception('Error while sending Request Canceled email!');
-            }
-            $transaction->commit();
-        } catch(\Throwable $e) {
-            $transaction->rollBack();
-            throw $e;
-        }
-        return true;
-    }
-
-    /** Accept a request.
-     *
-     * @return bool whether accepting a request was successful
-     */
-    public function acceptrequest($id)
-    {
-
-        return true;
-    }
-
     /**
      * Sends an email informing the trader about the request.
      *
