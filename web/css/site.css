@@ -14,11 +14,20 @@ body {
     padding: 70px 15px 20px;
 }
 
+.logo {
+    width: 42px;
+    height: 42px;
+    float: left;
+    margin: -10px 5px 0 0;
+}
+
 .footer {
     height: 60px;
     background-color: #f5f5f5;
     border-top: 1px solid #ddd;
-    padding-top: 20px;
+    padding-top: 16px;
+    font-size: 12px;
+    line-height: 14px;
 }
 
 .jumbotron {
@@ -96,9 +105,9 @@ a.desc:after {
     border: none;
 }
 
-@media(max-width:767px) {
+@media (max-width: 767px) {
     .nav li > form > button.logout {
-        display:block;
+        display: block;
         text-align: left;
         width: 100%;
         padding: 10px 15px;

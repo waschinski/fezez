@@ -29,7 +29,7 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => Yii::$app->name,
+        'brandLabel' => '<img src="images/fez_pixelized.png" class="logo"/>' . Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
@@ -72,9 +72,12 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left"><span style="text-decoration:line-through;">&copy;</span> Fezez the Merchant <?= date('Y') ?></p>
-
-        <p class="pull-right"><?= Yii::powered() ?></p>
+        <p class="pull-left" style="margin-top:8px">
+            <span style="text-decoration:line-through;">&copy;</span> Fezez the Merchant <?= date('Y') ?>
+        </p>
+        <p class="pull-right" style="text-align:right;"><?= Yii::powered() ?>
+            <br>Fez icon made by <a href="https://www.deviantart.com/katastrophi" title="Freepik">katastrophi</a>
+        </p>
     </div>
 </footer>
 
