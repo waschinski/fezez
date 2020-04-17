@@ -38,6 +38,15 @@ class InviteForm extends Invitation
      */
     public function invite()
     {
+        // remove expired invitations
+        $expiredInvitations = Invitation::find()
+                ->where(['new_user_id' => null])
+                ->andWhere('valid_until < UNIX_TIMESTAMP()')
+                ->all();
+        foreach ($expiredInvitations as $trash) {
+            $trash->delete();
+        }
+
         if (!$this->validate()) {
             return null;
         }
