@@ -58,6 +58,7 @@ class OfferController extends Controller
         $offer = new Offer();
         $offer->user_id = \Yii::$app->user->identity->ID;
         if ($offer->load(\Yii::$app->request->post()) && $offer->validate() && $offer->save()) {
+            $offer->discordNewOffer();
             Yii::$app->session->setFlash('success', 'Fezez confirms your offer.');
             return $this->redirect(['offer/myoffers']);
         }

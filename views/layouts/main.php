@@ -29,7 +29,7 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => '<img src="images/fez_pixelized.png" class="logo"/>' . Yii::$app->name,
+        'brandLabel' => '<img src="/images/fez_pixelized.png" class="logo"/>' . Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
