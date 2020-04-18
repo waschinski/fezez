@@ -58,7 +58,7 @@ class OfferController extends Controller
         $offer = new Offer();
         $offer->user_id = \Yii::$app->user->identity->ID;
         if ($offer->load(\Yii::$app->request->post()) && $offer->validate() && $offer->save()) {
-            $offer->discordNewOffer();
+            // $offer->discordNewOffer(); // TODO: implement check once active/inactive is on new offer form
             Yii::$app->session->setFlash('success', 'Fezez confirms your offer.');
             return $this->redirect(['offer/myoffers']);
         }
@@ -107,7 +107,9 @@ class OfferController extends Controller
             if (!$offer->save()) {
                 throw new \yii\db\Exception('Error while saving Offer model!');
             }
-
+            if ($status == Offer::STATUS_ACTIVE) {
+                $offer->discordNewOffer();
+            }
             Yii::$app->session->setFlash('success', 'Fezez '.$statustext.'d your offer.');
             return $this->redirect(['offer/myoffers']);
         } catch(\Throwable $e) {

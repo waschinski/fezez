@@ -36,7 +36,7 @@ class m200407_122035_init extends Migration
             'key_hash' => $this->string()->notNull(),
             'karma_threshold' => $this->integer()->defaultValue(0),
             'autoacceptrequest' => $this->boolean()->defaultValue(true),
-            'status' => $this->smallInteger()->notNull()->defaultValue(10),
+            'status' => $this->smallInteger()->notNull()->defaultValue(9),
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),
         ], $tableOptions);

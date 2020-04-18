@@ -3,7 +3,6 @@ namespace app\models;
 
 use Yii;
 use yii\base\NotSupportedException;
-use yii\helpers\Html;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
@@ -251,11 +250,11 @@ class Offer extends ActiveRecord
         $user = User::findOne($this->user_id);
         $signuptext = (Yii::$app->params['InvitationMandatory'] == '1' ? "ask for an invite" : "signup");
         $json_data = json_encode([
-            "content" => Html::encode($user->username) . " has just submitted a new offer in the marketplace on Fezez:",
+            "content" => $user->username . " has just submitted a new offer in the marketplace on Fezez:",
             "tts" => false,
             "embeds" => [
                 [
-                    "title" => Html::encode($this->description),
+                    "title" => $this->description,
                     "url" => \Yii::$app->params['homeURL'],
                     "description" => "Follow the link if you are interested in getting this key. Just login or " . $signuptext . " at Fezez.",
                 ]
