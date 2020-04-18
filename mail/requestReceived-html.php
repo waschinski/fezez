@@ -3,6 +3,7 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $user models\User */
+/* @var $description string */
 /* @var $requestuser models\User */
 
 $offersLink = Yii::$app->urlManager->createAbsoluteUrl(['offer/myoffers']);
@@ -10,7 +11,9 @@ $offersLink = Yii::$app->urlManager->createAbsoluteUrl(['offer/myoffers']);
 <div class="request-received">
     <p>Hello <?= Html::encode($user->username) ?>,</p>
 
-    <p><?= Html::encode($requestuser->username) ?> has requested one of your offers.</p>
+    <p><?= Html::encode($requestuser->username) ?> has requested one of your offers:</p>
+
+    <p><?= Html::encode($description) ?></p>
     
     <p>Follow the link below to accept or reject the request:</p>
 

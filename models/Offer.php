@@ -156,7 +156,7 @@ class Offer extends ActiveRecord
             ->mailer
             ->compose(
                 ['html' => 'requestReceived-html', 'text' => 'requestReceived-text'],
-                ['user' => $user, 'requestuser' => $requestuser]
+                ['user' => $user, 'description' => $this->description, 'requestuser' => $requestuser]
             )
             ->setFrom([Yii::$app->params['senderEmail'] => Yii::$app->params['senderName']])
             ->setTo($user->email)
