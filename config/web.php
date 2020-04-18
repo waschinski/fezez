@@ -54,7 +54,8 @@ $config = [
 			// Disable index.php
 			'showScriptName' => false,
 			// Disable r= routes
-			'enablePrettyUrl' => true,
+            'enablePrettyUrl' => true,
+            'baseUrl' => getenv('HOME_URL'),
 			'rules' => array(
                     'home' => 'site/home',
                     'invite' => 'site/invite',
