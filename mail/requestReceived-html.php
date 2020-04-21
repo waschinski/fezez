@@ -11,9 +11,9 @@ $offersLink = Yii::$app->urlManager->createAbsoluteUrl(['offer/myoffers']);
 <div class="request-received">
     <p><?= Yii::t('mail', 'Hello') ?> <?= Html::encode($user->username) ?>,</p>
 
-    <p><?= Yii::t('mail', '{username} has requested one of your offers:'), [
+    <p><?= Yii::t('mail', '{username} has requested one of your offers:', [
         'username' => Html::encode($requestuser->username)
-    ] ?></p>
+    ]) ?></p>
 
     <p><?= Html::encode($description) ?></p>
     

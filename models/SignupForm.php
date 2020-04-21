@@ -119,7 +119,9 @@ class SignupForm extends Model
             )
             ->setFrom([Yii::$app->params['senderEmail'] => Yii::$app->params['senderName']])
             ->setTo($this->email)
-            ->setSubject('Account registration at ' . Yii::$app->name)
+            ->setSubject(Yii::t('mail', 'Account registration at {sitename}', [
+                'sitename' => Yii::$app->name
+            ]))
             ->send();
     }
 }

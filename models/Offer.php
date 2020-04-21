@@ -165,7 +165,9 @@ class Offer extends ActiveRecord
             )
             ->setFrom([Yii::$app->params['senderEmail'] => Yii::$app->params['senderName']])
             ->setTo($user->email)
-            ->setSubject('Request received at ' . Yii::$app->name)
+            ->setSubject(Yii::t('mail', 'Request received at {sitename}', [
+                'sitename' => Yii::$app->name
+            ]))
             ->send();
     }
 
@@ -195,7 +197,9 @@ class Offer extends ActiveRecord
             )
             ->setFrom([Yii::$app->params['senderEmail'] => Yii::$app->params['senderName']])
             ->setTo($requestuser->email)
-            ->setSubject('Request rejected at ' . Yii::$app->name)
+            ->setSubject(Yii::t('mail', 'Request rejected at {sitename}', [
+                'sitename' => Yii::$app->name
+            ]))
             ->send();
     }
 
@@ -225,7 +229,9 @@ class Offer extends ActiveRecord
             )
             ->setFrom([Yii::$app->params['senderEmail'] => Yii::$app->params['senderName']])
             ->setTo($requestuser->email)
-            ->setSubject('Request accepted at ' . Yii::$app->name)
+            ->setSubject(Yii::t('mail', 'Request accepted at {sitename}', [
+                'sitename' => Yii::$app->name
+            ]))
             ->send();
     }
 
@@ -247,7 +253,9 @@ class Offer extends ActiveRecord
             )
             ->setFrom([Yii::$app->params['senderEmail'] => Yii::$app->params['senderName']])
             ->setTo($user->email)
-            ->setSubject('Request canceled at ' . Yii::$app->name)
+            ->setSubject(Yii::t('mail', 'Request canceled at {sitename}', [
+                'sitename' => Yii::$app->name
+            ]))
             ->send();
     }
 

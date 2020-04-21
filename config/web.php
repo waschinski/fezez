@@ -73,7 +73,18 @@ $config = [
 					'<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
 					'<controller:\w+>/<action:\w+>' => '<controller>/<action>', */
 			),
-		],
+        ],
+        'i18n' => [
+            'translations' => [
+                '*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@app/messages',
+                    'sourceLanguage' => 'en-US',
+                    'fileMap' => [
+                    ],
+                ],
+            ],
+        ],
     ],
     'params' => $params,
     'language' => getenv('SITE_LANG'),

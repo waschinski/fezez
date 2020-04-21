@@ -7,6 +7,6 @@
 ?>
 <?= Yii::t('mail', 'Hello') ?> <?= $user->username ?>,
 
-<?= Yii::t('mail', 'The request for {description} has been canceled.'), [
-        'description' => $offer->description
-    ] ?>
+<?= Yii::t('mail', 'The request for {description} has been canceled.', [
+    'description' => $offer->description
+]) ?>

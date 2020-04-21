@@ -7,6 +7,6 @@
 ?>
 <?= Yii::t('mail', 'Hello') ?> <?= $requestuser->username ?>,
 
-<?= Yii::t('mail', 'Sorry, but your request for {description} has been rejected.'), [
+<?= Yii::t('mail', 'Sorry, but your request for {description} has been rejected.', [
     'description' => $offer->description
-] ?>
+]) ?>

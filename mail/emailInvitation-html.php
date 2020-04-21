@@ -10,9 +10,9 @@ $signupLink = Yii::$app->urlManager->createAbsoluteUrl(['site/signup', 'email' =
 <div class="invitation-email">
     <p><?= Yii::t('mail', 'Hello') ?>,</p>
 
-    <p><?= Yii::t('mail', 'Your friend {username} has invited you to join Fezez.'), [
+    <p><?= Yii::t('mail', 'Your friend {username} has invited you to join Fezez.', [
         'username' => Html::encode($user->username)
-    ] ?></p>
+    ]) ?></p>
     
     <p><?= Yii::t('mail', 'Follow the link below to signup:') ?></p>
 

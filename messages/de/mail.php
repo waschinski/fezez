@@ -28,4 +28,11 @@ return [
     'This link is only valid for 24 hours and can only be used when signing up with your email address.' => 'Dieser Link ist nur 24 Stunden gültig und kann nur in Verbindung mit dieser E-Mail-Adresse genutzt werden.',
     'Your friend {username} has invited you to join Fezez.' => 'Dein Freund {username} hat dich zu Fezez eingeladen.',
     '{username} has requested one of your offers:' => '{username} hat eine Anfrage zu einem deiner Angebote geschickt:',
+    'Account registration at {sitename}' => 'Kontoregistrierung auf {sitename}',
+    'Invitation to {sitename}' => 'Einladung auf {sitename} erhalten',
+    'Password reset for {sitename}' => 'Passwort für {sitename} zurücksetzen',
+    'Request accepted at {sitename}' => 'Anfrage auf {sitename} angenommen',
+    'Request canceled at {sitename}' => 'Anfrage auf {sitename} abgebrochen',
+    'Request received at {sitename}' => 'Anfrage auf {sitename} erhalten',
+    'Request rejected at {sitename}' => 'Anfrage auf {sitename} abgelehnt',
 ];

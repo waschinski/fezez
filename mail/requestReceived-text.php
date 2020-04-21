@@ -9,9 +9,9 @@ $offersLink = Yii::$app->urlManager->createAbsoluteUrl(['offer/myoffers']);
 ?>
 <?= Yii::t('mail', 'Hello') ?> <?= $user->username ?>,
 
-<?= Yii::t('mail', '{username} has requested one of your offers:'), [
+<?= Yii::t('mail', '{username} has requested one of your offers:', [
     'username' => $requestuser->username
-] ?>
+]) ?>
 
 <?= $description ?>
 

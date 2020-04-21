@@ -7,8 +7,8 @@
 ?>
 <?= Yii::t('mail', 'Hello') ?> <?= $requestuser->username ?>,
 
-<?= Yii::t('mail', 'Grats, your request for {description} has been accepted. Find your key below:'), [
+<?= Yii::t('mail', 'Grats, your request for {description} has been accepted. Find your key below:', [
     'description' => $offer->description
-] ?>
+]) ?>
 
 <?= $offer->key ?>

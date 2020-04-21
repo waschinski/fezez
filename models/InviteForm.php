@@ -78,7 +78,9 @@ class InviteForm extends Invitation
             )
             ->setFrom([Yii::$app->params['senderEmail'] => Yii::$app->params['senderName']])
             ->setTo($this->email)
-            ->setSubject('Invitation to ' . Yii::$app->name)
+            ->setSubject(Yii::t('mail', 'Invitation to {sitename}', [
+                'sitename' => Yii::$app->name
+            ]))
             ->send();
     }
 }
