@@ -9,13 +9,15 @@ use yii\helpers\Html;
 $offersLink = Yii::$app->urlManager->createAbsoluteUrl(['offer/myoffers']);
 ?>
 <div class="request-received">
-    <p>Hello <?= Html::encode($user->username) ?>,</p>
+    <p><?= Yii::t('mail', 'Hello') ?> <?= Html::encode($user->username) ?>,</p>
 
-    <p><?= Html::encode($requestuser->username) ?> has requested one of your offers:</p>
+    <p><?= Yii::t('mail', '{username} has requested one of your offers:'), [
+        'username' => Html::encode($requestuser->username)
+    ] ?></p>
 
     <p><?= Html::encode($description) ?></p>
     
-    <p>Follow the link below to accept or reject the request:</p>
+    <p><?= Yii::t('mail', 'Follow the link below to accept or reject the request:') ?></p>
 
     <p><?= Html::a(Html::encode($offersLink), $offersLink) ?></p>
 </div>

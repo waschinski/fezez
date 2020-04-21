@@ -4,16 +4,17 @@
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\SignupForm */
 
+use Yii;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$this->title = 'Signup';
+$this->title = \Yii::t('app', 'Signup');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-signup">
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>Please fill out the following fields to signup:</p>
+    <p><?= \Yii::t('app', 'Please fill out the following fields to signup:') ?></p>
 
     <div class="row">
         <div class="col-lg-5">
@@ -28,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= (Yii::$app->params['InvitationMandatory'] == '1') ? $form->field($model, 'code') : '' ?>
 
                 <div class="form-group">
-                    <?= Html::submitButton('Signup', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
+                    <?= Html::submitButton(Yii::t('app', 'Signup'), ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
                 </div>
 
             <?php ActiveForm::end(); ?>

@@ -2,16 +2,17 @@
 
 namespace app\models;
 
+use Yii;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\data\ActiveDataProvider;
 
-$this->title = 'My Offers';
+$this->title = \Yii::t('app', 'My Offers');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="offer-myoffers">
     <h1><?= Html::encode($this->title) ?></h1>
-    <p>Below you will find all keys you are currently offering. <span style="font-style:italic"><?= Html::a('Got a new spare key?', ['offer/new']) ?></span></p>
+    <p><?= \Yii::t('app', 'Below you will find all keys you are currently offering.') ?> <span style="font-style:italic"><?= Html::a(Yii::t('app', 'Got a new spare key?'), ['offer/new']) ?></span></p>
 <?php
 $dataProvider = new ActiveDataProvider([
     'query' => Offer::find()
@@ -34,7 +35,7 @@ echo GridView::widget([
                     return Html::tag('span', $model->key, ['id' => 'key-' . $model->id, 'class' => 'hidden']);
                 },
                 'show' => function ($url, $model) {
-                    return Html::button('Show', [
+                    return Html::button(Yii::t('app', 'Show'), [
                             'onclick' => 'this.classList.add("hidden"); document.getElementById("key-' . $model->id . '").classList.remove("hidden");',
                             'class' =>'btn btn-primary btn-xs',
                     ]);
@@ -43,18 +44,21 @@ echo GridView::widget([
         ],
         [
             'attribute' => 'created_at',
-            'label' => 'Offered at',
-            'format' => 'datetime'
+            'label' => Yii::t('app', 'Offered at'),
+            'format' => 'datetime',
         ],
-        'state',
+        [
+            'attribute' => 'state',
+            'label' => Yii::t('app', 'State'),
+        ],
         [  
             'class' => 'yii\grid\ActionColumn',
-            'header'=> 'Actions',
+            'header'=> Yii::t('app', 'Actions'),
             'template' => '{activate} {deactivate} {reject} {accept} {edit}',
             'buttons' => [
                 'activate' => function ($url, $model) {
-                    return $model->status == Offer::STATUS_INACTIVE ? Html::a('Activate', ['offer/setstatus'], [
-                                'title' => 'Activate',
+                    return $model->status == Offer::STATUS_INACTIVE ? Html::a(Yii::t('app', 'Activate'), ['offer/setstatus'], [
+                                'title' => Yii::t('app', 'Activate'),
                                 'class' => 'btn btn-primary btn-xs',
                                 'data' =>[
                                     'method' => 'post',
@@ -66,8 +70,8 @@ echo GridView::widget([
                     ]) : '';
                 },
                 'deactivate' => function ($url, $model) {
-                    return $model->status == Offer::STATUS_ACTIVE ? Html::a('Deactivate', ['offer/setstatus'], [
-                                'title' => 'Deactivate',
+                    return $model->status == Offer::STATUS_ACTIVE ? Html::a(Yii::t('app', 'Deactivate'), ['offer/setstatus'], [
+                                'title' => Yii::t('app', 'Deactivate'),
                                 'class' => 'btn btn-primary btn-xs',
                                 'data' =>[
                                     'method' => 'post',
@@ -79,8 +83,8 @@ echo GridView::widget([
                     ]) : '';
                 },
                 'reject' => function ($url, $model) {
-                    return $model->status == Offer::STATUS_REQUESTED ? Html::a('Reject', ['request/reject'], [
-                                'title' => 'Reject',
+                    return $model->status == Offer::STATUS_REQUESTED ? Html::a(Yii::t('app', 'Reject'), ['request/reject'], [
+                                'title' => Yii::t('app', 'Reject'),
                                 'class' => 'btn btn-primary btn-xs',
                                 'data' =>[
                                     'method' => 'post',
@@ -91,8 +95,8 @@ echo GridView::widget([
                     ]) : '';
                 },
                 'accept' => function ($url, $model) {
-                    return $model->status == Offer::STATUS_REQUESTED ? Html::a('Accept', ['request/accept'], [
-                                'title' => 'Accept',
+                    return $model->status == Offer::STATUS_REQUESTED ? Html::a(Yii::t('app', 'Accept'), ['request/accept'], [
+                                'title' => Yii::t('app', 'Accept'),
                                 'class' => 'btn btn-primary btn-xs',
                                 'data' =>[
                                     'method' => 'post',
@@ -103,8 +107,8 @@ echo GridView::widget([
                     ]) : '';
                 },
                 'edit' => function ($url, $model) {
-                    return $model->status == Offer::STATUS_ACTIVE || $model->status == Offer::STATUS_INACTIVE ? Html::a('Edit', ['offer/edit/' . $model->id], [
-                                'title' => 'Edit',
+                    return $model->status == Offer::STATUS_ACTIVE || $model->status == Offer::STATUS_INACTIVE ? Html::a(Yii::t('app', 'Edit'), ['offer/edit/' . $model->id], [
+                                'title' => Yii::t('app', 'Edit'),
                                 'class' => 'btn btn-primary btn-xs',
                     ]) : '';
                 },

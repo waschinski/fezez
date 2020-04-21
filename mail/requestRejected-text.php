@@ -5,6 +5,8 @@
 /* @var $offer models\Offer */
 
 ?>
-Hello <?= $requestuser->username ?>,
+<?= Yii::t('mail', 'Hello') ?> <?= $requestuser->username ?>,
 
-Sorry, but your request for <?= $offer->description ?> has been rejected.
+<?= Yii::t('mail', 'Sorry, but your request for {description} has been rejected.'), [
+    'description' => $offer->description
+] ?>

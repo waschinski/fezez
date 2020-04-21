@@ -6,7 +6,9 @@ use yii\helpers\Html;
 
 ?>
 <div class="request-rejected">
-    <p>Hello <?= Html::encode($requestuser->username) ?>,</p>
+    <p><?= Yii::t('mail', 'Hello') ?> <?= Html::encode($requestuser->username) ?>,</p>
 
-    <p>Sorry, but your request for <?= Html::encode($offer->description) ?> has been rejected.</p>
+    <p><?= Yii::t('mail', 'Sorry, but your request for {description} has been rejected.'), [
+        'description' => Html::encode($offer->description)
+    ] ?></p>
 </div>

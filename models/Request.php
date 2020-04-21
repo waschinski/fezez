@@ -71,13 +71,13 @@ class Request extends ActiveRecord
     {
         switch($this->status) {
             case self::STATUS_DELETED:
-                return 'Canceled';
+                return Yii::t('app', 'Canceled');
             case self::STATUS_WAITING:
-                return 'Waiting';
+                return Yii::t('app', 'Waiting');
             case self::STATUS_REJECTED:
-                return 'Rejected';
+                return Yii::t('app', 'Rejected');
             case self::STATUS_ACCEPTED:
-                return 'Accepted';
+                return Yii::t('app', 'Accepted');
         }
             
         return 'Undefined';

@@ -42,8 +42,8 @@ class Offer extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'description' => 'Description',
-            'key' => 'Key',
+            'description' => \Yii::t('app', 'Description'),
+            'key' => \Yii::t('app', 'Key'),
         ];
     }
 
@@ -108,22 +108,27 @@ class Offer extends ActiveRecord
     {
         switch($this->status) {
             case self::STATUS_INACTIVE:
-                return 'Inactive';
+                return Yii::t('app', 'Inactive');
             case self::STATUS_ACTIVE:
-                return 'Active';
+                return Yii::t('app', 'Active');
             case self::STATUS_REQUESTED:
                 $request = Request::findOne(['offer_id' => $this->id]);
                 $requestee = User::findOne(['id' => $request->user_id]);
-                return 'Requested by ' . $requestee->username;
+                return Yii::t('app', 'Requested by {username}', [
+                    'username' => $requestee->username
+                ]);
             case self::STATUS_DELETED:
-                return 'Deleted';
+                return Yii::t('app', 'Deleted');
             case self::STATUS_RECEIVED:
                 $request = Request::findOne(['offer_id' => $this->id]);
                 $receiver = User::findOne(['id' => $request->user_id]);
-                return 'Received by ' . $receiver->username . ' on ' . Yii::$app->formatter->asDatetime($request->updated_at);
+                return Yii::t('app', 'Received by {username} on {date}', [
+                    'username' => $receiver->username,
+                    'date' => Yii::$app->formatter->asDatetime($request->updated_at)
+                ]);
         }
             
-        return 'Undefined';
+        return Yii::t('app', 'Undefined');
     }
 
     /**
@@ -248,15 +253,21 @@ class Offer extends ActiveRecord
 
     public function discordNewOffer() {
         $user = User::findOne($this->user_id);
-        $signuptext = (Yii::$app->params['InvitationMandatory'] == '1' ? "ask for an invite" : "signup");
+        $signuptext = (Yii::$app->params['InvitationMandatory'] == '1' ?
+            \Yii::t('app', 'Just login or ask for an invite at Fezez.') :
+            \Yii::t('app', 'Just login or signup at Fezez.')
+        );
         $json_data = json_encode([
-            "content" => $user->username . " has just submitted a new offer in the marketplace on Fezez:",
+            "content" => \Yii::t('app', '{username} is now offering {description} on the marketplace on Fezez:', [
+                'username' => $user->username,
+                'description' => $this->description
+            ]),
             "tts" => false,
             "embeds" => [
                 [
                     "title" => $this->description,
                     "url" => \Yii::$app->params['homeURL'],
-                    "description" => "Follow the link if you are interested in getting this key. Just login or " . $signuptext . " at Fezez.",
+                    "description" => \Yii::t('app', 'Follow the link if you are interested in getting this key.') . " " . $signuptext,
                 ]
             ]
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );

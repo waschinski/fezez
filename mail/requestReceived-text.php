@@ -7,12 +7,14 @@
 
 $offersLink = Yii::$app->urlManager->createAbsoluteUrl(['offer/myoffers']);
 ?>
-Hello <?= $user->username ?>,
+<?= Yii::t('mail', 'Hello') ?> <?= $user->username ?>,
 
-<?= $requestuser->username ?> has requested one of your offers:
+<?= Yii::t('mail', '{username} has requested one of your offers:'), [
+    'username' => $requestuser->username
+] ?>
 
 <?= $description ?>
 
-Follow the link below to accept or reject the request:
+<?= Yii::t('mail', 'Follow the link below to accept or reject the request:') ?>
 
 <?= $offersLink ?>

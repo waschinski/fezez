@@ -4,16 +4,17 @@
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\LoginForm */
 
+use Yii;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$this->title = 'Login';
+$this->title = \Yii::t('app', 'Login');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-login">
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>Please fill out the following fields to login:</p>
+    <p><?= \Yii::t('app', 'Please fill out the following fields to login:') ?></p>
 
     <?php $form = ActiveForm::begin([
         'id' => 'login-form',
@@ -34,15 +35,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="form-group">
             <div class="col-lg-offset-1 col-lg-11">
-                <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+                <?= Html::submitButton(Yii::t('app', 'Login'), ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
             </div>
         </div>
 
     <?php ActiveForm::end(); ?>
 
     <div class="col-lg-offset-1" style="color:#999;">
-        If you forgot your password you can <?= Html::a('reset it', ['site/request-password-reset']) ?>.
+        <?= \Yii::t('app', 'If you forgot your password you can {reset it}.', [
+            'reset it' => Html::a(Yii::t('app', 'reset it'), ['site/request-password-reset'])
+        ]) ?>
         <br>
-        Need new verification email? <?= Html::a('Resend', ['site/resend-verification-email']) ?>
+        <?= \Yii::t('app', 'Need new verification email?') ?> <?= Html::a(Yii::t('app', 'Resend'), ['site/resend-verification-email']) ?>
     </div>
 </div>

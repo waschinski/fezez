@@ -6,10 +6,11 @@
 
 namespace app\models;
 
+use Yii;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$this->title = 'Edit Offer';
+$this->title = \Yii::t('app', 'Edit Offer');
 $this->params['breadcrumbs'][] = ['label' => 'My Offers', 'url' => ['offer/myoffers']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

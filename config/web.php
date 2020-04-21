@@ -76,6 +76,7 @@ $config = [
 		],
     ],
     'params' => $params,
+    'language' => getenv('SITE_LANG'),
 ];
 
 if (YII_ENV_DEV) {

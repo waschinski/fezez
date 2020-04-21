@@ -6,9 +6,11 @@ use yii\helpers\Html;
 
 ?>
 <div class="request-accepted">
-    <p>Hello <?= Html::encode($requestuser->username) ?>,</p>
+    <p><?= Yii::t('mail', 'Hello') ?> <?= Html::encode($requestuser->username) ?>,</p>
 
-    <p>Grats, your request has been accepted. Find your key below:</p>
+    <p><?= Yii::t('mail', 'Grats, your request for {description} has been accepted. Find your key below:'), [
+        'description' => Html::encode($offer->description)
+    ] ?></p>
 
-    <p><?= Html::encode($offer->description) ?>: <?= Html::encode($offer->key) ?></p>
+    <p><?= Html::encode($offer->key) ?></p>
 </div>

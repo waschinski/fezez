@@ -77,11 +77,11 @@ class RequestController extends Controller
                 throw new \yii\db\Exception('Error while sending Request Received email!');
             }
             $transaction->commit();
-            Yii::$app->session->setFlash('success', 'Fezez sent your request to the trader.');
+            Yii::$app->session->setFlash('success', Yii::t('app', 'Fezez sent your request to the trader.'));
             return $this->redirect(['site/index']);
         } catch(\Throwable $e) {
             $transaction->rollBack();
-            Yii::$app->session->setFlash('error', 'Sorry, Fezez was unable to send your request to the trader.');
+            Yii::$app->session->setFlash('error', Yii::t('app', 'Sorry, Fezez was unable to send your request to the trader.'));
             return $this->render('@app/views/site/marketplace');
         }
     }
@@ -117,11 +117,11 @@ class RequestController extends Controller
                 throw new \yii\db\Exception('Error while sending Request Canceled email!');
             }
             $transaction->commit();
-            Yii::$app->session->setFlash('success', 'Fezez confirms canceling the request.');
+            Yii::$app->session->setFlash('success', Yii::t('app', 'Fezez confirms canceling the request.'));
             return $this->redirect(['request/myrequests']);
         } catch(\Throwable $e) {
             $transaction->rollBack();
-            Yii::$app->session->setFlash('error', 'Sorry, Fezez was unable to cancel your request.');
+            Yii::$app->session->setFlash('error', Yii::t('app', 'Sorry, Fezez was unable to cancel your request.'));
             return $this->render('myrequests');
         }
     }
@@ -157,11 +157,11 @@ class RequestController extends Controller
                 throw new \yii\db\Exception('Error while sending Request Received email!');
             }
             $transaction->commit();
-            Yii::$app->session->setFlash('success', 'Fezez confirms rejecting the request.');
+            Yii::$app->session->setFlash('success', Yii::t('app', 'Fezez confirms rejecting the request.'));
             return $this->redirect(['offer/myoffers']);
         } catch(\Throwable $e) {
             $transaction->rollBack();
-            Yii::$app->session->setFlash('error', 'Sorry, Fezez was unable to reject the request.');
+            Yii::$app->session->setFlash('error', Yii::t('app', 'Sorry, Fezez was unable to reject the request.'));
             return $this->render('myoffers');
         }
     }
@@ -197,12 +197,12 @@ class RequestController extends Controller
                 throw new \yii\db\Exception('Error while sending Request Accepted email!');
             }
             $transaction->commit();
-            Yii::$app->session->setFlash('success', 'Fezez confirms accepting the request.');
+            Yii::$app->session->setFlash('success', Yii::t('app', 'Fezez confirms accepting the request.'));
             return $this->redirect(['offer/myoffers']);
         } catch(\Throwable $e) {
             $transaction->rollBack();
             throw $e;
-            Yii::$app->session->setFlash('error', 'Sorry, Fezez was unable to accept the request.');
+            Yii::$app->session->setFlash('error', Yii::t('app', 'Sorry, Fezez was unable to accept the request.'));
             return $this->render('myoffers');
         }
     }

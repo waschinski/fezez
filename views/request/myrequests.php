@@ -2,16 +2,17 @@
 
 namespace app\models;
 
+use Yii;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\data\ActiveDataProvider;
 
-$this->title = 'My Requests';
+$this->title = \Yii::t('app', 'My Requests');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="offer-myrequests">
     <h1><?= Html::encode($this->title) ?></h1>
-    <p>Below you will find all keys you have been requesting from other users.</p>
+    <p><?= \Yii::t('app', 'Below you will find all keys you have been requesting from other users.') ?></p>
 <?php
 $dataProvider = new ActiveDataProvider([
     'query' => Request::find()
@@ -35,28 +36,31 @@ echo GridView::widget([
                     return Html::tag('span', $model->key, ['id' => 'key-' . $model->id, 'class' => 'hidden']);
                 },
                 'show' => function ($url, $model) {
-                    return $model->key != '' ? Html::button('Show', [
+                    return $model->key != '' ? Html::button(Yii::t('app', 'Show'), [
                             'onclick' => 'this.classList.add("hidden"); document.getElementById("key-' . $model->id . '").classList.remove("hidden");',
                             'class' =>'btn btn-primary btn-xs',
                     ]) : '';
                 },
             ]
         ],
-        'state',
+        [
+            'attribute' => 'state',
+            'label' => Yii::t('app', 'State'),
+        ],
         [
             'attribute' => 'created_at',
-            'label' => 'Requested at',
-            'format' => 'datetime'
+            'label' => Yii::t('app', 'Requested at'),
+            'format' => 'datetime',
         ],
         [  
             'class' => 'yii\grid\ActionColumn',
             // 'contentOptions' => ['style' => 'width:260px;'],
-            'header'=> 'Actions',
+            'header'=> Yii::t('app', 'Actions'),
             'template' => '{cancel}',
             'buttons' => [
                 'cancel' => function ($url, $model) {
-                    return $model->status == Request::STATUS_WAITING ? Html::a('Cancel', ['request/cancel'], [
-                                'title' => 'Cancel',
+                    return $model->status == Request::STATUS_WAITING ? Html::a(Yii::t('app', 'Cancel'), ['request/cancel'], [
+                                'title' => Yii::t('app', 'Cancel'),
                                 'class'=> 'btn btn-primary btn-xs',
                                 'data'=>[
                                     'method'=> 'post',

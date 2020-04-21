@@ -59,7 +59,7 @@ class OfferController extends Controller
         $offer->user_id = \Yii::$app->user->identity->ID;
         if ($offer->load(\Yii::$app->request->post()) && $offer->validate() && $offer->save()) {
             // $offer->discordNewOffer(); // TODO: implement check once active/inactive is on new offer form
-            Yii::$app->session->setFlash('success', 'Fezez confirms your offer.');
+            Yii::$app->session->setFlash('success', Yii::t('app', 'Fezez confirms your offer.'));
             return $this->redirect(['offer/myoffers']);
         }
 
@@ -78,7 +78,7 @@ class OfferController extends Controller
         $id = Yii::$app->request->get('id');
         $offer = Offer::findOne(['id' => $id, 'user_id' => \Yii::$app->user->identity->ID]);
         if ($offer->load(\Yii::$app->request->post()) && $offer->validate() && $offer->save()) {
-            Yii::$app->session->setFlash('success', 'Fezez updated your offer.');
+            Yii::$app->session->setFlash('success', Yii::t('app', 'Fezez updated your offer.'));
             return $this->redirect(['offer/myoffers']);
         }
         return $this->render('editoffer', [
@@ -97,9 +97,9 @@ class OfferController extends Controller
         $id = Yii::$app->request->post('id');
         $status = Yii::$app->request->post('status');
         if ($status == Offer::STATUS_ACTIVE) {
-            $statustext = 'activate';
+            $statustext = Yii::t('app', 'activate');
         } else {
-            $statustext = 'deactivate';
+            $statustext = Yii::t('app', 'deactivate');
         }
         try {
             $offer = Offer::findOne(['id' => $id, 'user_id' => \Yii::$app->user->identity->id]);
@@ -110,10 +110,19 @@ class OfferController extends Controller
             if ($status == Offer::STATUS_ACTIVE) {
                 $offer->discordNewOffer();
             }
-            Yii::$app->session->setFlash('success', 'Fezez '.$statustext.'d your offer.');
+            
+            Yii::$app->session->setFlash('success',
+                $status == Offer::STATUS_ACTIVE ?
+                \Yii::t('app', 'Fezez activated your offer.') : 
+                \Yii::t('app', 'Fezez deactivated your offer.')
+            );
             return $this->redirect(['offer/myoffers']);
         } catch(\Throwable $e) {
-            Yii::$app->session->setFlash('error', 'Sorry, Fezez was unable to '.$statustext.' your offer status.');
+            Yii::$app->session->setFlash('error', 
+                $status == Offer::STATUS_ACTIVE ?
+                \Yii::t('app', 'Sorry, Fezez was unable to activate your offer.') : 
+                \Yii::t('app', 'Sorry, Fezez was unable to deactivate your offer.')
+            );
             return $this->render('myoffers');
         }
     }

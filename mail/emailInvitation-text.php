@@ -5,12 +5,14 @@
 
 $signupLink = Yii::$app->urlManager->createAbsoluteUrl(['site/signup', 'email' => $invitation->email, 'code' => $invitation->code]);
 ?>
-Hello,
+<?= Yii::t('mail', 'Hello') ?>,
 
-Your friend <?= $user->username ?> has invited you to join Fezez.
+<?= Yii::t('mail', 'Your friend {username} has invited you to join Fezez.'), [
+    'username' => $user->username
+] ?>
     
-Follow the link below to signup:
+<?= Yii::t('mail', 'Follow the link below to signup:') ?>
 
 <?= $signupLink ?>
 
-This link is only valid for 24 hours and can only be used when signing up with your email address.
+<?= Yii::t('mail', 'This link is only valid for 24 hours and can only be used when signing up with your email address.') ?>

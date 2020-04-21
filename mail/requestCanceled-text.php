@@ -5,6 +5,8 @@
 /* @var $offer models\Offer */
 
 ?>
-Hello <?= $user->username ?>,
+<?= Yii::t('mail', 'Hello') ?> <?= $user->username ?>,
 
-The request for <?= $offer->description ?> has been canceled.
+<?= Yii::t('mail', 'The request for {description} has been canceled.'), [
+        'description' => $offer->description
+    ] ?>
