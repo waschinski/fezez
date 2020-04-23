@@ -44,13 +44,17 @@ echo GridView::widget([
             ]
         ],
         [
-            'attribute' => 'state',
-            'label' => Yii::t('app', 'State'),
+            'attribute' => 'offer.displayprice',
+            'label' => Yii::t('app', 'Price'),
         ],
         [
             'attribute' => 'created_at',
             'label' => Yii::t('app', 'Requested at'),
             'format' => 'datetime',
+        ],
+        [
+            'attribute' => 'state',
+            'label' => Yii::t('app', 'State'),
         ],
         [  
             'class' => 'yii\grid\ActionColumn',

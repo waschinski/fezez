@@ -43,6 +43,10 @@ echo GridView::widget([
             ]
         ],
         [
+            'attribute' => 'displayprice',
+            'label' => Yii::t('app', 'Price'),
+        ],
+        [
             'attribute' => 'created_at',
             'label' => Yii::t('app', 'Offered at'),
             'format' => 'datetime',
@@ -54,7 +58,7 @@ echo GridView::widget([
         [  
             'class' => 'yii\grid\ActionColumn',
             'header'=> Yii::t('app', 'Actions'),
-            'template' => '{activate} {deactivate} {reject} {accept} {edit}',
+            'template' => '{activate} {deactivate} {reject} {accept} {edit} {paid}',
             'buttons' => [
                 'activate' => function ($url, $model) {
                     return $model->status == Offer::STATUS_INACTIVE ? Html::a(Yii::t('app', 'Activate'), ['offer/setstatus'], [
@@ -109,6 +113,12 @@ echo GridView::widget([
                 'edit' => function ($url, $model) {
                     return $model->status == Offer::STATUS_ACTIVE || $model->status == Offer::STATUS_INACTIVE ? Html::a(Yii::t('app', 'Edit'), ['offer/edit/' . $model->id], [
                                 'title' => Yii::t('app', 'Edit'),
+                                'class' => 'btn btn-primary btn-xs',
+                    ]) : '';
+                },
+                'paid' => function ($url, $model) {
+                    return $model->status == Offer::STATUS_PAYABLE ? Html::a(Yii::t('app', 'Paid'), ['request/paid/' . $model->id], [
+                                'title' => Yii::t('app', 'Paid'),
                                 'class' => 'btn btn-primary btn-xs',
                     ]) : '';
                 },

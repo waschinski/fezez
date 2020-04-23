@@ -28,20 +28,35 @@ echo GridView::widget([
     'columns' => [
         'description',
         [
+            'attribute' => 'displayprice',
+            'label' => Yii::t('app', 'Price'),
+        ],
+        [
             'attribute' => 'created_at',
             'label' => Yii::t('app', 'Offered at'),
             'format' => 'datetime'
         ],
-        // 'statusdescription',
-[  
+        [  
             'class' => 'yii\grid\ActionColumn',
             // 'contentOptions' => ['style' => 'width:260px;'],
             'header'=> Yii::t('app', 'Actions'),
-            'template' => '{request}',
+            'template' => '{request} {buy}',
             'buttons' => [
                 'request' => function ($url, $model) {
-                    return $model->status == Offer::STATUS_ACTIVE ? Html::a(Yii::t('app', 'Request'), ['request/request'], [
+                    return $model->status == Offer::STATUS_ACTIVE && $model->price == 0 ? Html::a(Yii::t('app', 'Request'), ['offer/request'], [
                                 'title' => Yii::t('app', 'Request'),
+                                'class'=> 'btn btn-primary btn-xs',
+                                'data'=>[
+                                    'method'=> 'post',
+                                    'params'=> [
+                                        'id' => $model->id
+                                    ],
+                                ]
+                    ]) : '';
+                },
+                'buy' => function ($url, $model) {
+                    return $model->status == Offer::STATUS_ACTIVE && $model->price > 0 ? Html::a(Yii::t('app', 'Buy'), ['offer/buy'], [
+                                'title' => Yii::t('app', 'Buy'),
                                 'class'=> 'btn btn-primary btn-xs',
                                 'data'=>[
                                     'method'=> 'post',

@@ -91,4 +91,12 @@ class Request extends ActiveRecord
         return $this->hasOne(Offer::className(), ['id' => 'offer_id']);
     }
 
+    /**
+     * User related to the request
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
 }

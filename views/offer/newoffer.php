@@ -9,6 +9,7 @@ namespace app\models;
 use Yii;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use kartik\number\NumberControl;
 
 $this->title = \Yii::t('app', 'New Offer');
 $this->params['breadcrumbs'][] = ['label' => 'My Offers', 'url' => ['offer/myoffers']];
@@ -25,6 +26,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $form->field($model, 'description')->textInput(['autofocus' => true]) ?>
 
                 <?= $form->field($model, 'key') ?>
+
+                <?= $form->field($model, 'price')->widget(NumberControl::className(), [
+                    'name' => 'currency-num',
+                    'value' => 0,
+                    'maskedInputOptions' => Offer::PRICEFORMAT[getenv('SITE_LANG')],
+                ]) ?>
+
+                <?= $form->field($model, 'paypalmelink') ?>
 
                 <div class="form-group">
                     <?= Html::submitButton(Yii::t('app', 'Submit'), ['class' => 'btn btn-primary', 'name' => 'newoffer-button']) ?>

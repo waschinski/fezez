@@ -126,4 +126,85 @@ class OfferController extends Controller
             return $this->render('myoffers');
         }
     }
+
+    /**
+     * Request an offer.
+     *
+     * @return string
+     */
+    public function actionRequest()
+    {
+        $id = Yii::$app->request->post('id');
+        $transaction = Offer::getDb()->beginTransaction();
+        $offer = Offer::findOne($id);
+        try {
+            if ($offer->status != Offer::STATUS_ACTIVE) {
+                throw new \yii\base\Exception('Error while requesting Offer: Offer not active!');
+            }
+            $offer->status = Offer::STATUS_REQUESTED;
+            if (!$offer->save()) {
+                throw new \yii\db\Exception('Error while saving Offer model!');
+            }
+            $request = new Request();
+            $request->offer_id = $offer->id;
+            $request->user_id = Yii::$app->user->identity->id;
+            $request->status = Request::STATUS_WAITING;
+            if (!$request->save()) {
+                throw new \yii\db\Exception('Error while saving Request model!');
+            }
+            if (!$offer->sendRequestReceivedEmail()) {
+                throw new \yii\db\Exception('Error while sending Request Received email!');
+            }
+            $transaction->commit();
+            Yii::$app->session->setFlash('success', Yii::t('app', 'Fezez sent your request to the trader.'));
+            return $this->redirect(['site/index']);
+        } catch(\Throwable $e) {
+            $transaction->rollBack();
+            var_dump($e);
+            Yii::$app->session->setFlash('error', Yii::t('app', 'Sorry, Fezez was unable to send your request to the trader.'));
+            return $this->render('@app/views/site/marketplace');
+        }
+    }
+
+    /**
+     * Buy an offer.
+     *
+     * @return string
+     */
+    public function actionBuy()
+    {
+        $id = Yii::$app->request->post('id');
+        $transaction = Offer::getDb()->beginTransaction();
+        $offer = Offer::findOne($id);
+        try {
+            if ($offer->status != Offer::STATUS_ACTIVE) {
+                throw new \yii\base\Exception('Error while requesting Offer: Offer not active!');
+            }
+            $offer->status = Offer::STATUS_PAYABLE;
+            if (!$offer->save()) {
+                throw new \yii\db\Exception('Error while saving Offer model!');
+            }
+            $request = new Request();
+            $request->offer_id = $offer->id;
+            $request->user_id = Yii::$app->user->identity->id;
+            $request->status = Request::STATUS_WAITING;
+            if (!$request->save()) {
+                throw new \yii\db\Exception('Error while saving Request model!');
+            }
+            if (!$offer->sendRequestToBuyReceivedEmail()) {
+                throw new \yii\db\Exception('Error while sending Request To Buy Received email!');
+            }
+            if (!$offer->sendPaymentRequiredEmail()) {
+                throw new \yii\db\Exception('Error while sending Payment Required email!');
+            }
+            $transaction->commit();
+            Yii::$app->session->setFlash('success', Yii::t('app', 'Fezez sent your request to the trader.'));
+            return $this->redirect(['site/index']);
+        } catch(\Throwable $e) {
+            $transaction->rollBack();
+            var_dump($e);
+            Yii::$app->session->setFlash('error', Yii::t('app', 'Sorry, Fezez was unable to send your request to the trader.'));
+            return $this->render('@app/views/site/marketplace');
+        }
+    }
 }

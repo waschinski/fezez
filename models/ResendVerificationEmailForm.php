@@ -54,7 +54,7 @@ class ResendVerificationEmailForm extends Model
             )
             ->setFrom([Yii::$app->params['senderEmail'] => Yii::$app->params['senderName']])
             ->setTo($this->email)
-            ->setSubject(Yii::t('mail', 'Account registration at {sitename}', [
+            ->setSubject(Yii::t('mail', 'Verify account registration at {sitename}', [
                 'sitename' => Yii::$app->name
             ]))
             ->send();

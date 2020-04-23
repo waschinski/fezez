@@ -19,7 +19,7 @@ services:
       - SMTP_ENCRYPTION=
       - INVITATION_MANDATORY=0
       - DISCORD_WEBHOOK_URL=
-      - SITE_LANG=
+      - SITE_LANG=en-US
     volumes:
       - ~/.composer-docker/cache:/root/.composer/cache:delegated
       - ./:/app:delegated

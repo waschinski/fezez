@@ -69,6 +69,7 @@ $config = [
                     'myrequests' => 'request/myrequests',
                     'myoffers' => 'offer/myoffers',
                     'offer/edit/<id:\d+>' => 'offer/edit',
+                    'request/paid/<id:\d+>' => 'request/paid',
 					/* '<controller:\w+>/<id:\d+>' => '<controller>/view',
 					'<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
 					'<controller:\w+>/<action:\w+>' => '<controller>/<action>', */
