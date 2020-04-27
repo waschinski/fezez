@@ -31,7 +31,7 @@ return [
     'Request received at {sitename}' => 'Anfrage auf {sitename} erhalten',
     'Request rejected at {sitename}' => 'Anfrage auf {sitename} abgelehnt',
     'Sorry, but your request for {description} has been rejected.' => 'Entschuldige, aber deine Anfrage für {description} wurde abgelehnt.',
-    'The request for {description} has been canceled.' => 'Deine Anfrage für {description} wurde abgebrochen.',
+    'The request for {description} has been canceled.' => 'Die Anfrage für {description} wurde abgebrochen.',
     'This link is only valid for 24 hours and can only be used when signing up with your email address.' => 'Dieser Link ist nur 24 Stunden und in Verbindung mit dieser E-Mail-Adresse gültig.',
     'Your friend {username} has invited you to join Fezez.' => 'Dein Freund {username} hat dich zu Fezez eingeladen.',
     '{username} has requested one of your offers:' => '{username} hat eine Anfrage zu einem deiner Angebote geschickt:',
