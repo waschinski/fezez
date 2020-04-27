@@ -15,7 +15,7 @@ use app\models\ResetPasswordForm;
 use app\models\PasswordResetRequestForm;
 use app\models\ResendVerificationEmailForm;
 use app\models\InviteForm;
-
+use app\models\MarketplaceSearch;
 
 class SiteController extends Controller
 {
@@ -73,7 +73,12 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('marketplace');
+        $searchModel = new MarketplaceSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        return $this->render('marketplace', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**

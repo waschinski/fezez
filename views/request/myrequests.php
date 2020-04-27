@@ -5,7 +5,10 @@ namespace app\models;
 use Yii;
 use yii\helpers\Html;
 use yii\grid\GridView;
-use yii\data\ActiveDataProvider;
+use yii\widgets\Pjax;
+
+/* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $searchModel app\models\RequestSearch */
 
 $this->title = \Yii::t('app', 'My Requests');
 $this->params['breadcrumbs'][] = $this->title;
@@ -14,19 +17,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <p><?= \Yii::t('app', 'Below you will find all keys you have been requesting from other users.') ?></p>
 <?php
-$dataProvider = new ActiveDataProvider([
-    'query' => Request::find()
-        ->joinWith('offer')
-        ->where(['request.user_id' => \Yii::$app->user->identity->ID])
-        ->orderBy(['created_at' => SORT_DESC]),
-    'pagination' => [
-        'pageSize' => 20,
-    ],
-]);
+Pjax::begin();
+
 echo GridView::widget([
     'dataProvider' => $dataProvider,
+    'filterModel' => $searchModel,
     'columns' => [
-        'offer.description',
+        'description',
         [  
             'class' => 'yii\grid\ActionColumn',
             'header'=> 'Key',
@@ -78,5 +75,7 @@ echo GridView::widget([
         ],
     ]
 ]);
+
+Pjax::end();
 ?>
 </div>

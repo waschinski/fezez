@@ -8,17 +8,21 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
 /**
- * Offer model
+ * This is the model class for table "offer".
  *
- * @property integer $id
- * @property integer $user_id
+ * @property int $id
+ * @property int $user_id
  * @property string $description
  * @property string $key_hash
- * @property integer $karma_threshold
- * @property bool $autoacceptrequest
- * @property integer $status
- * @property integer $created_at
- * @property integer $updated_at
+ * @property int|null $karma_threshold
+ * @property int|null $autoacceptrequest
+ * @property int $status
+ * @property int $created_at
+ * @property int $updated_at
+ * @property float $price
+ *
+ * @property Request[] $requests
+ * @property User $user
  */
 class Offer extends ActiveRecord
 {
@@ -88,17 +92,25 @@ class Offer extends ActiveRecord
     public function rules()
     {
         return [
-            ['description', 'trim'],
-            ['description', 'required'],
-            ['description', 'string', 'max' => 255],
+            [['description', 'key', 'paypalmelink'], 'trim'],
+            [['description', 'key', 'paypalmelink'], 'required'],
+            [['user_id', 'karma_threshold', 'autoacceptrequest', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['key'], 'string', 'min' => 4, 'max' => 64],
+            [['price'], 'double', 'min' => 0, 'max' => 999.99],
+            [['description', 'key_hash'], 'string', 'max' => 255],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
 
-            ['key', 'trim'],
-            ['key', 'required'],
-            ['key', 'string', 'min' => 4, 'max' => 64],
+            //['description', 'trim'],
+            //['description', 'required'],
+            //['description', 'string', 'max' => 255],
 
-            ['price', 'double', 'min' => 0, 'max' => 999.99],
+            //['key', 'trim'],
+            //['key', 'required'],
+            //['key', 'string', 'min' => 4, 'max' => 64],
 
-            ['paypalmelink', 'string', 'max' => 255],
+            //['price', 'double', 'min' => 0, 'max' => 999.99],
+
+            //['paypalmelink', 'string', 'max' => 255],
 
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [

@@ -8,6 +8,7 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\Offer;
+use app\models\OfferSearch;
 use app\models\Request;
 
 class OfferController extends Controller
@@ -45,7 +46,12 @@ class OfferController extends Controller
      */
     public function actionMyoffers()
     {
-        return $this->render('myoffers');
+        $searchModel = new OfferSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        return $this->render('myoffers', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**

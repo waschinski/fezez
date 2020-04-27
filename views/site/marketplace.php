@@ -5,7 +5,10 @@ namespace app\models;
 use Yii;
 use yii\helpers\Html;
 use yii\grid\GridView;
-use yii\data\ActiveDataProvider;
+use yii\widgets\Pjax;
+
+/* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $searchModel app\models\OfferSearch */
 
 $this->title = \Yii::t('app', 'Marketplace');
 $this->params['breadcrumbs'][] = $this->title;
@@ -14,17 +17,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <p><?= \Yii::t('app', 'Have a look at all the keys currently offered by other users.') ?> <span style="font-style:italic"><?= Html::a(Yii::t('app', 'Got a spare key too?'), ['offer/new']) ?></span></p>
 <?php
-$dataProvider = new ActiveDataProvider([
-    'query' => Offer::find()
-        ->where(['status' => Offer::STATUS_ACTIVE])
-        ->andWhere(['not', ['user_id' => \Yii::$app->user->identity->ID]])
-        ->orderBy(['created_at' => SORT_DESC]),
-    'pagination' => [
-        'pageSize' => 20,
-    ],
-]);
+Pjax::begin();
+
 echo GridView::widget([
     'dataProvider' => $dataProvider,
+    'filterModel' => $searchModel,
     'columns' => [
         'description',
         [
@@ -70,5 +67,7 @@ echo GridView::widget([
         ],
     ]
 ]);
+
+Pjax::end();
 ?>
 </div>

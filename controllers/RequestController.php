@@ -8,6 +8,7 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\Request;
+use app\models\RequestSearch;
 use app\models\Offer;
 use app\models\User;
 
@@ -46,7 +47,13 @@ class RequestController extends Controller
      */
     public function actionMyrequests()
     {
-        return $this->render('myrequests');
+        $searchModel = new RequestSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('myrequests', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**

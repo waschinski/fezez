@@ -8,14 +8,17 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
 /**
- * Request model
+ * This is the model class for table "request".
  *
- * @property integer $id
- * @property integer $user_id
- * @property integer $offer_id
- * @property integer $status
- * @property integer $created_at
- * @property integer $updated_at
+ * @property int $id
+ * @property int $user_id
+ * @property int $offer_id
+ * @property int $status
+ * @property int $created_at
+ * @property int $updated_at
+ *
+ * @property Offer $offer
+ * @property User $user
  */
 class Request extends ActiveRecord
 {
@@ -50,18 +53,40 @@ class Request extends ActiveRecord
         return [
             ['status', 'default', 'value' => self::STATUS_WAITING],
             ['status', 'in', 'range' => [self::STATUS_ACCEPTED, self::STATUS_REJECTED, self::STATUS_WAITING, self::STATUS_DELETED]],
+            [['user_id', 'offer_id', 'created_at', 'updated_at'], 'required'],
+            [['user_id', 'offer_id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['offer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Offer::className(), 'targetAttribute' => ['offer_id' => 'id']],
+            [['description'], 'string', 'max' => 255],
         ];
     }
 
     /**
-     * Decrypts and returns key hash
+     * Returns offer key
      */
     public function getkey()
     {
         if ($this->status == self::STATUS_ACCEPTED) {
             return Offer::findOne(['id' => $this->offer_id])->getKey();
+            //return $this->getOffer()->getKey();
         }
         return '';
+    }
+
+    /**
+     * Returns offer description
+     */
+    public function getdescription()
+    {
+        return self::getOffer()->one()['description'];
+    }
+
+    /**
+     * Sets offer description
+     */
+    public function setdescription($description)
+    {
+        $this->description = $description;
     }
 
     /**
