@@ -12,7 +12,7 @@ use yii\bootstrap\ActiveForm;
 use kartik\number\NumberControl;
 
 $this->title = \Yii::t('app', 'New Offer');
-$this->params['breadcrumbs'][] = ['label' => 'My Offers', 'url' => ['offer/myoffers']];
+$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'My Offers'), 'url' => ['offer/myoffers']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="offer-myoffers">
