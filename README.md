@@ -28,3 +28,11 @@ SMTP_PASSWORD | SMTP password
 SMTP_ENCRYPTION | SMTP encryption type
 INVITATION_MANDATORY | Defines if users have to be invited before the can signup
 DISCORD_WEBHOOK_URL | Your discord webhook URL if you want updates pushed to a Discord channel
+
+You will also have to manually run the following commands on the container:
+```bash
+composer update
+```
+```bash
+yii migrate
+```
