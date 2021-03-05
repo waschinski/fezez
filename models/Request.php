@@ -53,7 +53,7 @@ class Request extends ActiveRecord
         return [
             ['status', 'default', 'value' => self::STATUS_WAITING],
             ['status', 'in', 'range' => [self::STATUS_ACCEPTED, self::STATUS_REJECTED, self::STATUS_WAITING, self::STATUS_DELETED]],
-            [['user_id', 'offer_id', 'created_at', 'updated_at'], 'required'],
+            [['user_id', 'offer_id', 'status'], 'required'],
             [['user_id', 'offer_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['offer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Offer::className(), 'targetAttribute' => ['offer_id' => 'id']],
